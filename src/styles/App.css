@@ -1,0 +1,16 @@
+header h1 {
+  border-bottom: 1px solid #F2F2F2;
+  padding-bottom: 0.5em;
+  font-weight: 200;
+  font-size: 34px;
+  color: #F2F2F2;
+  letter-spacing: -0.22px;
+}
+
+h2 {
+  font-size: 24px;
+  color: #F2F2F2;
+  letter-spacing: -0.18px;
+  text-transform: uppercase;
+  font-weight: 200;
+}
