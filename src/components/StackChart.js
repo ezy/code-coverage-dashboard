@@ -2,12 +2,20 @@ import React, { Component } from 'react';
 import {BarStackHorizontal} from '@vx/shape';
 import {Group} from '@vx/group';
 import {scaleBand, scaleLinear, scaleOrdinal} from '@vx/scale';
-import {max} from 'd3-array';
 
 class StackChart extends Component {
   render() {
-    const dataTotals = require('../data/coverage-summary.json');
+    // const dataTotals = require('../data/coverage-summary.json');
     const fileSet = this.props.fileSet;
+    const totalData = () => {
+      if (this.props.data) {
+        return this.props.data;
+      }
+      let dataObj = {};
+      dataObj[fileSet] = {statements: {total: 1, covered: 0, skipped: 0, pct: 0}};
+      return dataObj;
+    };
+    let dataTotals = totalData();
     const dataSet = Object.keys(dataTotals)
       .filter((d) => {
         return d.includes(fileSet);
@@ -24,7 +32,6 @@ class StackChart extends Component {
     let sTotal = dataSet.length >= 2 ? sumValues(dataSet, 'total') : dataSet[0].total;
     let sCovered = dataSet.length >= 2 ? sumValues(dataSet, 'covered') : dataSet[0].covered;
     let sPct = sCovered/sTotal*100;
-    const domainTotal = [100]
     const data = [{
       pct: sPct,
       diff: 100 - sPct
@@ -38,7 +45,6 @@ class StackChart extends Component {
       right: 20,
       bottom: 20
     };
-
     if (width < 10) return null;
 
     // bounds
@@ -48,7 +54,7 @@ class StackChart extends Component {
     //  scales
     const xScale = scaleLinear({
       rangeRound: [0, xMax],
-      domain: [0, max(domainTotal)],
+      domain: [0, 100],
       nice: true
     });
     const yScale = scaleBand({
