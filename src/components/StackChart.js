@@ -7,6 +7,7 @@ class StackChart extends Component {
   render() {
     // const dataTotals = require('../data/coverage-summary.json');
     const fileSet = this.props.fileSet;
+    // If props exist for data reurn them, otherwise return defaults
     const totalData = () => {
       if (this.props.data) {
         return this.props.data;
@@ -16,6 +17,7 @@ class StackChart extends Component {
       return dataObj;
     };
     let dataTotals = totalData();
+    // Filter the target file groups and return 'statements' for our metric
     const dataSet = Object.keys(dataTotals)
       .filter((d) => {
         return d.includes(fileSet);
@@ -23,6 +25,7 @@ class StackChart extends Component {
       .map((d) => {
         return dataTotals[d]['statements'];
       });
+    // Sum the statement values for one or many items
     const sumValues = (obj, key) => Object.values(obj).reduce((a, b) => {
       if (!b) {
         return a[key];
@@ -31,7 +34,9 @@ class StackChart extends Component {
     });
     let sTotal = dataSet.length >= 2 ? sumValues(dataSet, 'total') : dataSet[0].total;
     let sCovered = dataSet.length >= 2 ? sumValues(dataSet, 'covered') : dataSet[0].covered;
+    // Work out precentage from totaled values
     let sPct = sCovered/sTotal*100;
+    // Set the data
     const data = [{
       pct: sPct,
       diff: 100 - sPct
