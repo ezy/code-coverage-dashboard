@@ -5,7 +5,26 @@ import LineChart from '../components/LineChart';
 import StackChart from '../components/StackChart';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
+const directoryUrl = process.env.REACT_APP_DATA_DIR_URL;
+let apiData;
+
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { data: null };
+  }
+  componentDidMount() {
+    fetch(directoryUrl).then((res) => {
+      return res.json();
+    }).then((responseJson) => {
+      apiData = responseJson[0].download_url;
+      fetch(apiData).then((res) => {
+        return res.json();
+      }).then((res) => {
+        this.setState({ data: res })
+      }).catch((error) => console.error(error));
+    }).catch((error) => console.error(error));
+  }
   render() {
     return (
       <Grid fluid className="App">
@@ -18,7 +37,7 @@ class App extends Component {
         </Row>
         <Row>
           <Col sm={12}>
-            <LineChart />
+            <LineChart data={this.state.data} />
           </Col>
         </Row>
         <Row>
