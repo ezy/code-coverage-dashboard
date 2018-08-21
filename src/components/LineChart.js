@@ -2,57 +2,22 @@ import React, { Component } from 'react';
 import { LinePath, Line, Bar } from '@vx/shape';
 import { scaleTime, scaleLinear } from '@vx/scale';
 import { GridRows } from '@vx/grid';
-import { localPoint } from '@vx/event';
 import { AxisBottom } from '@vx/axis';
-import { extent, bisector } from 'd3-array';
+import { extent } from 'd3-array';
 
-function SaveDataToLocalStorage(data) {
-  let a = localStorage.getItem('statementTotals') ? JSON.parse(localStorage.getItem('statementTotals')) : [];
-  data.date = new Date().toISOString();
-  a.push(data);
-  localStorage.setItem('statementTotals', JSON.stringify(a));
-}
-
-// localStorage.clear();
 const sTotal = JSON.parse(localStorage.getItem('statementTotals')) || 0;
-
 const xSelector = d => new Date(d.date);
 const ySelector = d => d.value;
-const bisectDate = bisector(xSelector).left;
 
 class LineChart extends Component {
   state = {
     position: null,
     statementKey: null
   };
-  handleDrag = ({ event, data, xSelector, xScale, yScale }) => {
-    const { x } = localPoint(event);
-    const x0 = xScale.invert(x);
-    let index = bisectDate(data, x0, 1);
-    const d0 = data[index - 1];
-    const d1 = data[index];
-    let d = d0;
-    if (d1 && d1.date) {
-      if (x0 - xSelector(d0) > xSelector(d1) - x0) {
-        d = d1;
-      } else {
-        d = d0;
-        index = index -1;
-      }
-    }
-    this.setState({
-      position: {
-        index,
-        x: xScale(xSelector(d)),
-      },
-    });
-  };
   render() {
     let statementTotals;
     if (this.props.data) {
       statementTotals = `${this.props.data.total.statements.total} TOTAL STATEMENTS`;
-      let niceData = { value: this.props.data.total.statements.pct };
-      SaveDataToLocalStorage(niceData);
     }
     const { position } = this.state;
     // calculate graph width based on window minus padding
@@ -120,32 +85,6 @@ class LineChart extends Component {
           fill="transparent"
           rx={14}
           data={sTotal}
-          onTouchStart={data => event =>
-            this.handleDrag({
-              event,
-              data,
-              xSelector,
-              xScale,
-              yScale,
-            })}
-          onTouchMove={data => event =>
-            this.handleDrag({
-              event,
-              data,
-              xSelector,
-              xScale,
-              yScale,
-            })}
-          onMouseMove={data => event =>
-            this.handleDrag({
-              event,
-              data,
-              xSelector,
-              xScale,
-              yScale,
-            })}
-          onTouchEnd={data => event => this.setState({ position: null })}
-          onMouseLeave={data => event => this.setState({ position: null })}
         />
         <text
           dy={"1.5em"}
