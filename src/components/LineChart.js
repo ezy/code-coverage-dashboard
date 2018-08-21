@@ -6,15 +6,6 @@ import { localPoint } from '@vx/event';
 import { AxisBottom } from '@vx/axis';
 import { extent, bisector } from 'd3-array';
 
-// const glob = require('glob');
-// const thisfile = glob("../data/**/*.js", null, function (er, files) {
-//   return files;
-// })
-// console.log(thisfile);
-const directoryUrl = 'https://api.github.com/facebook/react-native';
-const dataTotals = require('../data/coverage-summary.json');
-const niceData = { value: dataTotals.total.statements.pct };
-
 function SaveDataToLocalStorage(data) {
   let a = localStorage.getItem('statementTotals') ? JSON.parse(localStorage.getItem('statementTotals')) : [];
   data.date = new Date().toISOString();
@@ -23,9 +14,7 @@ function SaveDataToLocalStorage(data) {
 }
 
 // localStorage.clear();
-
-SaveDataToLocalStorage(niceData);
-const sTotal = JSON.parse(localStorage.getItem('statementTotals'));
+const sTotal = JSON.parse(localStorage.getItem('statementTotals')) || 0;
 
 const xSelector = d => new Date(d.date);
 const ySelector = d => d.value;
@@ -34,6 +23,7 @@ const bisectDate = bisector(xSelector).left;
 class LineChart extends Component {
   state = {
     position: null,
+    statementKey: null
   };
   handleDrag = ({ event, data, xSelector, xScale, yScale }) => {
     const { x } = localPoint(event);
@@ -50,7 +40,6 @@ class LineChart extends Component {
         index = index -1;
       }
     }
-
     this.setState({
       position: {
         index,
@@ -58,18 +47,13 @@ class LineChart extends Component {
       },
     });
   };
-  componentDidMount() {
-    fetch(directoryUrl).then((response) => {
-      console.log(response);
-      return response.json();
-    }).then((responseJson) => {
-      console.log(responseJson);
-      return responseJson;
-    }).catch((error) => {
-      console.error(error);
-    });
-  }
   render() {
+    let statementTotals;
+    if (this.props.data) {
+      statementTotals = `${this.props.data.total.statements.total} TOTAL STATEMENTS`;
+      let niceData = { value: this.props.data.total.statements.pct };
+      SaveDataToLocalStorage(niceData);
+    }
     const { position } = this.state;
     // calculate graph width based on window minus padding
     const width = document.documentElement.offsetWidth-40;
@@ -172,7 +156,7 @@ class LineChart extends Component {
           style={{ pointerEvents: "none" }}
           fill="#60BFFF"
         >
-          {`${dataTotals.total.statements.total} TOTAL STATEMENTS`}
+          {statementTotals}
         </text>
         <AxisBottom
           scale={xScale}
