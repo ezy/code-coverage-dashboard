@@ -21,7 +21,7 @@ class LineChart extends Component {
     const { position } = this.state;
     // calculate graph width based on window minus padding
     const width = document.documentElement.offsetWidth-40;
-    const height = 300;
+    const height = 270;
     const margin = {
       top: 60,
       bottom: 30

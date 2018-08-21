@@ -5,13 +5,13 @@ import { Group } from '@vx/group';
 class DonutChart extends Component {
   render() {
     const selectName = this.props.selectName;
-    const dataStatementTotal = this.props.data ? this.props.data.total[selectName] : {pct: 0};
+    const dataStatementTotal = this.props.data ? this.props.data.total[selectName] : { pct: 0 };
     const remainder = 100 - dataStatementTotal.pct;
     const pctData = [{pct: dataStatementTotal.pct, rem: remainder}];
     const chartData = Object.keys(pctData[0])
       .map(k => ({usage: pctData[0][k] }));
     const width = parseInt((document.documentElement.offsetWidth/4-10).toFixed(0), 10);
-    const height = (width/1.4).toFixed(0);
+    const height = parseInt((width/1.4).toFixed(0), 10);
     if (width < 10) return null;
     const fills = ['#55CA01', '#F0FFE4'];
     const radius = Math.min(width, height)/2;

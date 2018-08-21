@@ -93,13 +93,13 @@ class App extends Component {
         </Row>
         <Row>
           <Col sm={12}>
-            <StackChart fileSet='index.route.js'/>
-            <StackChart fileSet='config'/>
-            <StackChart fileSet='server/auth'/>
-            <StackChart fileSet='server/helpers'/>
-            <StackChart fileSet='server/post'/>
-            <StackChart fileSet='server/tag'/>
-            <StackChart fileSet='server/user'/>
+            <StackChart fileSet='index.route.js' data={this.state.data}/>
+            <StackChart fileSet='config' data={this.state.data}/>
+            <StackChart fileSet='server/auth' data={this.state.data}/>
+            <StackChart fileSet='server/helpers' data={this.state.data}/>
+            <StackChart fileSet='server/post' data={this.state.data}/>
+            <StackChart fileSet='server/tag' data={this.state.data}/>
+            <StackChart fileSet='server/user' data={this.state.data}/>
           </Col>
         </Row>
       </Grid>
