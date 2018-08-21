@@ -32,6 +32,7 @@ class App extends Component {
       localStorage.setItem('fileName', file);
       return true;
     }
+    // We fetch the github folder directory based on our .env variables
     fetch(directoryUrl).then((res) => {
       return res.json();
     }).then((responseJson) => {
@@ -63,7 +64,7 @@ class App extends Component {
         </Row>
         <Row>
           <Col sm={12}>
-            <LineChart data={this.state.data}/>
+            <LineChart data={this.state.data} />
           </Col>
         </Row>
         <Row>
@@ -73,16 +74,16 @@ class App extends Component {
         </Row>
         <Row>
           <Col sm={3}>
-            <DonutChart selectName='statements' />
+            <DonutChart selectName='statements' data={this.state.data} />
           </Col>
           <Col sm={3}>
-            <DonutChart selectName='lines' />
+            <DonutChart selectName='lines' data={this.state.data} />
           </Col>
           <Col sm={3}>
-            <DonutChart selectName='functions' />
+            <DonutChart selectName='functions' data={this.state.data} />
           </Col>
           <Col sm={3}>
-            <DonutChart selectName='branches' />
+            <DonutChart selectName='branches' data={this.state.data} />
           </Col>
         </Row>
         <Row>

@@ -5,10 +5,10 @@ import { Group } from '@vx/group';
 class DonutChart extends Component {
   render() {
     const selectName = this.props.selectName;
-    const dataStatementTotal = require('../data/coverage-summary.json').total[selectName];
+    const dataStatementTotal = this.props.data ? this.props.data.total[selectName] : {pct: 0};
     const remainder = 100 - dataStatementTotal.pct;
     const pctData = [{pct: dataStatementTotal.pct, rem: remainder}];
-    const data = Object.keys(pctData[0])
+    const chartData = Object.keys(pctData[0])
       .map(k => ({usage: pctData[0][k] }));
     const width = parseInt((document.documentElement.offsetWidth/4-10).toFixed(0), 10);
     const height = (width/1.4).toFixed(0);
@@ -19,7 +19,7 @@ class DonutChart extends Component {
       <svg width={width} height={height}>
         <Group top={height/2.5} left={width/2}>
           <Pie
-            data={data}
+            data={chartData}
             pieValue={d => d.usage}
             outerRadius={radius - (radius/3)}
             innerRadius={radius - (radius/2)}

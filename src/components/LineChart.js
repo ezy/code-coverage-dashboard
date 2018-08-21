@@ -11,8 +11,7 @@ const ySelector = d => d.value;
 
 class LineChart extends Component {
   state = {
-    position: null,
-    statementKey: null
+    position: null
   };
   render() {
     let statementTotals;
