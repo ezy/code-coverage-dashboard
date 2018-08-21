@@ -47,18 +47,13 @@ class App extends Component {
         </Row>
         <Row>
           <Col sm={12}>
-            <StackChart fileSet='app/app.js'/>
-            <StackChart fileSet='app/router.js'/>
-            <StackChart fileSet='app/adapters'/>
-            <StackChart fileSet='app/components'/>
-            <StackChart fileSet='app/components/flows'/>
-            <StackChart fileSet='app/controllers'/>
-            <StackChart fileSet='app/helpers'/>
-            <StackChart fileSet='app/mixins'/>
-            <StackChart fileSet='app/models'/>
-            <StackChart fileSet='app/routes'/>
-            <StackChart fileSet='app/services'/>
-            <StackChart fileSet='app/utils'/>
+            <StackChart fileSet='index.route.js'/>
+            <StackChart fileSet='config'/>
+            <StackChart fileSet='server/auth'/>
+            <StackChart fileSet='server/helpers'/>
+            <StackChart fileSet='server/post'/>
+            <StackChart fileSet='server/tag'/>
+            <StackChart fileSet='server/user'/>
           </Col>
         </Row>
       </Grid>

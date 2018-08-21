@@ -6,22 +6,14 @@ import { localPoint } from '@vx/event';
 import { AxisBottom } from '@vx/axis';
 import { extent, bisector } from 'd3-array';
 
+// const glob = require('glob');
+// const thisfile = glob("../data/**/*.js", null, function (er, files) {
+//   return files;
+// })
+// console.log(thisfile);
+const directoryUrl = 'https://api.github.com/facebook/react-native';
 const dataTotals = require('../data/coverage-summary.json');
 const niceData = { value: dataTotals.total.statements.pct };
-
-function getDataFromUrl() {
-   return fetch('https://facebook.github.io/react-native/movies.json')
-   .then((response) => response.json())
-   .then((responseJson) => {
-     console.log(responseJson);
-     return responseJson.movies;
-   })
-   .catch((error) => {
-     console.error(error);
-   });
-}
-
-getDataFromUrl();
 
 function SaveDataToLocalStorage(data) {
   let a = localStorage.getItem('statementTotals') ? JSON.parse(localStorage.getItem('statementTotals')) : [];
@@ -66,6 +58,17 @@ class LineChart extends Component {
       },
     });
   };
+  componentDidMount() {
+    fetch(directoryUrl).then((response) => {
+      console.log(response);
+      return response.json();
+    }).then((responseJson) => {
+      console.log(responseJson);
+      return responseJson;
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
   render() {
     const { position } = this.state;
     // calculate graph width based on window minus padding
