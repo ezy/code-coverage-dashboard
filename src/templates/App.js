@@ -38,6 +38,7 @@ class App extends Component {
     // We fetch the github folder directory based on our .env variables
     fetch(directoryUrl).then(res => res.json()).then((responseJson) => {
       // We use newFileHash to check if the filename has changed
+      console.log(responseJson[0].name);
       const saveTrigger = newFileHash(responseJson[0].name);
       const apiData = responseJson[0].download_url;
       fetch(apiData).then(res => res.json()).then((res) => {
@@ -53,6 +54,10 @@ class App extends Component {
   }
 
   render() {
+    // Set a one hour timeout to refresh and update data
+    setTimeout(() => {
+      window.location.reload();
+    }, 3600000);
     return (
       <Grid fluid className="App">
         <Row>
