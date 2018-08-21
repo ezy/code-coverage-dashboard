@@ -11,20 +11,22 @@ const ySelector = d => d.value;
 
 class LineChart extends Component {
   state = {
-    position: null
+    position: null,
   };
+
   render() {
     let statementTotals;
-    if (this.props.data) {
-      statementTotals = `${this.props.data.total.statements.total} TOTAL STATEMENTS`;
+    const { data } = this.props;
+    if (data) {
+      statementTotals = `${this.props.data.total.statements.total} TOTAL STATEMENTS`; // eslint-disable-line react/destructuring-assignment
     }
     const { position } = this.state;
     // calculate graph width based on window minus padding
-    const width = document.documentElement.offsetWidth-40;
+    const width = document.documentElement.offsetWidth - 40;
     const height = 270;
     const margin = {
       top: 60,
-      bottom: 30
+      bottom: 30,
     };
     const yMax = height - margin.top - margin.bottom;
 
@@ -86,12 +88,12 @@ class LineChart extends Component {
           data={sTotal}
         />
         <text
-          dy={"1.5em"}
-          dx={".5em"}
+          dy="1.5em"
+          dx=".5em"
           fontSize={14}
           fontWeight={200}
-          textAnchor={"left"}
-          style={{ pointerEvents: "none" }}
+          textAnchor="left"
+          style={{ pointerEvents: 'none' }}
           fill="#60BFFF"
         >
           {statementTotals}
@@ -101,10 +103,10 @@ class LineChart extends Component {
           top={yMax + margin.top}
           stroke="#094c9b"
           tickStroke="transparent"
-          tickLabelProps={(value, index) => ({
+          tickLabelProps={(value, index) => ({ // eslint-disable-line no-unused-vars
             fill: '#9A9A9A',
             fontSize: 11,
-            textAnchor: 'middle'
+            textAnchor: 'middle',
           })}
         />
       </svg>

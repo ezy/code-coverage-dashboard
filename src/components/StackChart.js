@@ -1,30 +1,29 @@
 import React, { Component } from 'react';
-import {BarStackHorizontal} from '@vx/shape';
-import {Group} from '@vx/group';
-import {scaleBand, scaleLinear, scaleOrdinal} from '@vx/scale';
+import { BarStackHorizontal } from '@vx/shape';
+import { Group } from '@vx/group';
+import { scaleBand, scaleLinear, scaleOrdinal } from '@vx/scale';
 
 class StackChart extends Component {
   render() {
-    // const dataTotals = require('../data/coverage-summary.json');
-    const fileSet = this.props.fileSet;
+    const { fileSet } = this.props;
     // If props exist for data reurn them, otherwise return defaults
     const totalData = () => {
-      if (this.props.data) {
-        return this.props.data;
+      if (this.props.data) { // eslint-disable-line react/destructuring-assignment
+        return this.props.data; // eslint-disable-line react/destructuring-assignment
       }
-      let dataObj = {};
-      dataObj[fileSet] = {statements: {total: 1, covered: 0, skipped: 0, pct: 0}};
+      const dataObj = {};
+      dataObj[fileSet] = {
+        statements: {
+          total: 1, covered: 0, skipped: 0, pct: 0,
+        },
+      };
       return dataObj;
     };
-    let dataTotals = totalData();
+    const dataTotals = totalData();
     // Filter the target file groups and return 'statements' for our metric
     const dataSet = Object.keys(dataTotals)
-      .filter((d) => {
-        return d.includes(fileSet);
-      })
-      .map((d) => {
-        return dataTotals[d]['statements'];
-      });
+      .filter(d => d.includes(fileSet))
+      .map(d => dataTotals[d].statements);
     // Sum the statement values for one or many items
     const sumValues = (obj, key) => Object.values(obj).reduce((a, b) => {
       if (!b) {
@@ -32,23 +31,23 @@ class StackChart extends Component {
       }
       return typeof a === 'object' ? a[key] + b[key] : a + b[key];
     });
-    let sTotal = dataSet.length >= 2 ? sumValues(dataSet, 'total') : dataSet[0].total;
-    let sCovered = dataSet.length >= 2 ? sumValues(dataSet, 'covered') : dataSet[0].covered;
+    const sTotal = dataSet.length >= 2 ? sumValues(dataSet, 'total') : dataSet[0].total;
+    const sCovered = dataSet.length >= 2 ? sumValues(dataSet, 'covered') : dataSet[0].covered;
     // Work out precentage from totaled values
-    let sPct = sCovered/sTotal*100;
+    const sPct = sCovered / sTotal * 100;
     // Set the data
     const data = [{
       pct: sPct,
-      diff: 100 - sPct
+      diff: 100 - sPct,
     }];
     const keys = Object.keys(data[0]).map(d => d);
-    const width = parseInt((document.documentElement.offsetWidth/8-5).toFixed(0), 10);
+    const width = parseInt((document.documentElement.offsetWidth / 8 - 5).toFixed(0), 10);
     const height = 80;
     const margin = {
       top: 40,
       left: 0,
       right: 20,
-      bottom: 20
+      bottom: 20,
     };
     if (width < 10) return null;
 
@@ -60,16 +59,16 @@ class StackChart extends Component {
     const xScale = scaleLinear({
       rangeRound: [0, xMax],
       domain: [0, 100],
-      nice: true
+      nice: true,
     });
     const yScale = scaleBand({
       rangeRound: [40, 0],
       domain: 1,
-      padding: 0.4
+      padding: 0.4,
     });
     const zScale = scaleOrdinal({
       domain: keys,
-      range: ['#55CA01', '#F0FFE4']
+      range: ['#55CA01', '#F0FFE4'],
     });
 
     return (
@@ -87,23 +86,23 @@ class StackChart extends Component {
               zScale={zScale}
             />
             <text
-              dy={"-.7em"}
+              dy="-.7em"
               fontSize={16}
               fontWeight={200}
-              textAnchor={"left"}
-              style={{ pointerEvents: "none" }}
-              fill={"#F2F2F2"}
+              textAnchor="left"
+              style={{ pointerEvents: 'none' }}
+              fill="#F2F2F2"
             >
               {fileSet}
             </text>
             <text
-              dy={"1.1em"}
-              dx={".3em"}
+              dy="1.1em"
+              dx=".3em"
               fontSize={16}
               fontWeight={200}
-              textAnchor={"left"}
-              style={{ pointerEvents: "none" }}
-              fill={"#001E40"}
+              textAnchor="left"
+              style={{ pointerEvents: 'none' }}
+              fill="#001E40"
             >
               {sPct.toFixed()}
             </text>
