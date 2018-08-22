@@ -29,6 +29,7 @@ class App extends Component {
     const newFileHash = (file) => {
       const ogFile = localStorage.getItem('fileName');
       if (ogFile) {
+        localStorage.setItem('fileName', file);
         return !ogFile.includes(file);
       }
       // if fileName doesn't exist we should set it
@@ -46,7 +47,7 @@ class App extends Component {
           SaveDataToLocalStorage({ value: res.total.statements.pct });
         }
         // localStorage.clear();
-        console.log(JSON.parse(localStorage.getItem('statementTotals')));
+        console.log(localStorage.fileName, JSON.parse(localStorage.getItem('statementTotals')));
         // SaveDataToLocalStorage({ value: res.total.statements.pct });
         this.setState({ data: res });
       }).catch(error => console.error(error));
