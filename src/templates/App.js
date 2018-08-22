@@ -18,31 +18,31 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // Contains all the logic for loading data into localStorage
+  // Contains all the logic for loading data into localStorage
     const SaveDataToLocalStorage = (data) => {
       const a = localStorage.getItem('statementTotals') ? JSON.parse(localStorage.getItem('statementTotals')) : [];
       data.date = new Date().toISOString();
       a.push(data);
       localStorage.setItem('statementTotals', JSON.stringify(a));
     };
-    // Checks if the file hash has changed at the endpoint
-    const newFileHash = (sha) => {
-      const ogSha = localStorage.getItem('fileId');
-      if (ogSha) {
-        localStorage.setItem('fileId', sha);
-        return !ogSha.includes(sha);
+    // Checks if the filename has changed at the endpoint
+    const newFileHash = (file) => {
+      const ogFile = localStorage.getItem('fileName');
+      if (ogFile) {
+        localStorage.setItem('fileName', file);
+        return !ogFile.includes(file);
       }
-      // if fileId doesn't exist we should set it
-      localStorage.setItem('fileId', sha);
+      // if fileName doesn't exist we should set it
+      localStorage.setItem('fileName', file);
       return true;
     };
     // We fetch the github folder directory based on our .env variables
     fetch(directoryUrl).then(res => res.json()).then((responseJson) => {
-      // We use newFileHash to check if the sha hases match
-      const saveTrigger = newFileHash(responseJson[0].sha);
+    // We use newFileHash to check if the filename has changed
+      const saveTrigger = newFileHash(responseJson[0].name);
       const apiData = responseJson[0].download_url;
       fetch(apiData).then(res => res.json()).then((res) => {
-        // We only save data to local storage if the file hash has changed
+      // We only save data to local storage if the file hash has changed
         if (saveTrigger) {
           SaveDataToLocalStorage({ value: res.total.statements.pct });
         }

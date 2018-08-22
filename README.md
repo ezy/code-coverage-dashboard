@@ -22,7 +22,15 @@ A simple dashboard for Istanbul code coverage reports designed to be deployed to
 
 ## Istanbul setup
 
-Reports are generated from the `json-summary` report by Istanbul. There's an example `isantbul.yml` file in the project directory that includes report settings for `html` and `json-summary` reports.
+Reports are generated from the `json-summary` report by Istanbul. There's an example `isantbul.yml` file in the project directory that includes report settings for `html` and `json-summary` reports. In order for your filename changes to be picked up you can timeStamp the `coverage-sumary.json` file by using the following script in your `package.json` file:
+
+```JSON
+{
+  "scripts": {
+    "covdate": "mv coverage/coverage-summary.json coverage/coverage-summary-$(date +%Y%m%d%H%M).json"
+  }
+}
+```
 
 ## Configuring reports
 
