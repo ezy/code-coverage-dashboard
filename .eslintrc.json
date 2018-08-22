@@ -12,6 +12,9 @@
         "no-use-before-define": 0,
         "react/jsx-filename-extension": 0,
         "react/prop-types": 0,
-        "react/destructuring-assignment": 0
+        "react/destructuring-assignment": 0,
+        "no-shadow": 0,
+        "global-require": 0,
+        "import/no-dynamic-require": 0
     }
 }
