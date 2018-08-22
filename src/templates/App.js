@@ -47,7 +47,6 @@ class App extends Component {
           SaveDataToLocalStorage({ value: res.total.statements.pct });
         }
         // localStorage.clear();
-        console.log(localStorage.fileName, JSON.parse(localStorage.getItem('statementTotals')));
         // SaveDataToLocalStorage({ value: res.total.statements.pct });
         this.setState({ data: res });
       }).catch(error => console.error(error));
@@ -58,7 +57,7 @@ class App extends Component {
     // Set a one hour timeout to refresh and update data
     setTimeout(() => {
       window.location.reload();
-    }, 3000);
+    }, 3600000);
     return (
       <Grid fluid className="App">
         <Row>
