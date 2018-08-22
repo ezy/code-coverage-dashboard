@@ -46,6 +46,7 @@ class App extends Component {
           SaveDataToLocalStorage({ value: res.total.statements.pct });
         }
         // localStorage.clear();
+        console.log(JSON.parse(localStorage.getItem('statementTotals')));
         // SaveDataToLocalStorage({ value: res.total.statements.pct });
         this.setState({ data: res });
       }).catch(error => console.error(error));
