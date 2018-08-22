@@ -58,7 +58,7 @@ class App extends Component {
     // Set a one hour timeout to refresh and update data
     setTimeout(() => {
       window.location.reload();
-    }, 3600000);
+    }, 3000);
     return (
       <Grid fluid className="App">
         <Row>
