@@ -41,12 +41,7 @@ class App extends Component {
     // We use newFileHash to check if the filename has changed
       const saveTrigger = newFileHash(responseJson[0].name);
       const apiData = responseJson[0].download_url;
-      fetch(apiData, {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      }).then(res => res.json()).then((res) => {
+      fetch(apiData).then(res => res.json()).then((res) => {
         // We only save data to local storage if the file hash has changed
         if (saveTrigger) {
           SaveDataToLocalStorage({ value: res.total.statements.pct });
