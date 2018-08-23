@@ -28,7 +28,10 @@ class App extends Component {
     // Checks if the filename has changed at the endpoint
     const newFileHash = (file) => {
       const ogFile = localStorage.getItem('fileName');
-      const ogArray = localStorage.getItem('statementTotals');
+      // Check the array has at least 2 values to show on LineChart
+      const ogArray = localStorage.getItem('statementTotals')
+        ? JSON.parse(localStorage.getItem('statementTotals')).length >= 2
+        : false;
       // Make sure both localStorage items exist
       if (ogFile && ogArray) {
         localStorage.setItem('fileName', file);
