@@ -40,6 +40,8 @@ class LineChart extends Component {
       domain: [0, 100],
     });
 
+    console.log(sTotal);
+
     return (
       <svg width={width} height={height}>
         <rect x={0} y={0} width={width} height={height} fill="#01172f" stroke="#094c9b" strokeWidth="4" />
@@ -50,7 +52,7 @@ class LineChart extends Component {
           stroke="#143d6d"
         />
         <LinePath
-          data={position ? sTotal.slice(0, position.index) : sTotal}
+          data={position && sTotal ? sTotal.slice(0, position.index) : sTotal}
           xScale={xScale}
           yScale={yScale}
           x={xSelector}
