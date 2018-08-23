@@ -40,6 +40,16 @@ class LineChart extends Component {
       domain: [0, 100],
     });
 
+    /**
+     * On first load you'll get at Linepath - data el:
+     *
+     * 'Warning: Failed prop type: Invalid prop `data` of type `number`
+     * supplied to `LinePath`, expected `array`.'
+     *
+     * This is expected as localStorage needs to set the values in the array on
+     * first run.
+     */
+
     return (
       <svg width={width} height={height}>
         <rect x={0} y={0} width={width} height={height} fill="#01172f" stroke="#094c9b" strokeWidth="4" />

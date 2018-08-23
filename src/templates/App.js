@@ -29,6 +29,7 @@ class App extends Component {
     const newFileHash = (file) => {
       const ogFile = localStorage.getItem('fileName');
       const ogArray = localStorage.getItem('statementTotals');
+      // Make sure both localStorage items exist
       if (ogFile && ogArray) {
         localStorage.setItem('fileName', file);
         return !ogFile.includes(file);
