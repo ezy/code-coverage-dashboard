@@ -28,7 +28,8 @@ class App extends Component {
     // Checks if the filename has changed at the endpoint
     const newFileHash = (file) => {
       const ogFile = localStorage.getItem('fileName');
-      if (ogFile) {
+      const ogArray = localStorage.getItem('statementTotals');
+      if (ogFile && ogArray) {
         localStorage.setItem('fileName', file);
         return !ogFile.includes(file);
       }
