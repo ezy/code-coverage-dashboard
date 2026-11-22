@@ -1,10 +1,8 @@
-/* eslint-disable react/destructuring-assignment */
+import { Component } from 'react';
+import { Pie } from '@visx/shape';
+import { Group } from '@visx/group';
 
-import React, { Component } from 'react';
-import { Pie } from '@vx/shape';
-import { Group } from '@vx/group';
-
-class DonutChart extends Component { // eslint-disable-line
+class DonutChart extends Component {
   render() {
     const { selectName } = this.props;
     const dataStatementTotal = this.props.data ? this.props.data.total[selectName] : { pct: 0 };
@@ -22,7 +20,7 @@ class DonutChart extends Component { // eslint-disable-line
     const fills = ['#55CA01', '#F0FFE4'];
     const radius = Math.min(width, height) / 2;
     return (
-      <svg width={width} height={height}>
+      <svg width={width} height={height} role="img" aria-label={`${selectName} coverage`}>
         <Group top={height / 2.5} left={width / 2}>
           <Pie
             data={chartData}
@@ -31,7 +29,7 @@ class DonutChart extends Component { // eslint-disable-line
             innerRadius={radius - (radius / 2)}
             fill={d => fills[d.index]}
             padAngle={0}
-            pieSort={(a, b) => a.index - b.index}
+            pieSortValues={null}
           />
           <text
             dy=".33em"

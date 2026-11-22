@@ -1,3 +1,22 @@
+.App {
+  padding: 0 15px;
+}
+
+.App-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.App-row--totals .App-total {
+  flex: 1 1 100%;
+}
+
+.App-row--sections .StackChart {
+  flex: 1 1 auto;
+}
+
 header h1 {
   border-bottom: 1px solid #F2F2F2;
   padding-bottom: 0.5em;
@@ -13,4 +32,10 @@ h2 {
   letter-spacing: -0.18px;
   text-transform: uppercase;
   font-weight: 200;
+}
+
+@media (min-width: 48em) {
+  .App-row--totals .App-total {
+    flex: 1 1 0;
+  }
 }

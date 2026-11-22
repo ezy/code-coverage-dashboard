@@ -1,13 +1,21 @@
-/* eslint-disable react/destructuring-assignment */
-
-import React, { Component } from 'react';
+import { Component } from 'react';
 import '../styles/App.css';
-import { Grid, Row, Col } from 'react-flexbox-grid';
 import DonutChart from '../components/DonutChart';
 import LineChart from '../components/LineChart';
 import StackChart from '../components/StackChart';
 
-const directoryUrl = process.env.REACT_APP_DATA_DIR_URL;
+const directoryUrl = import.meta.env.VITE_DATA_DIR_URL;
+
+const TOTALS = ['statements', 'lines', 'functions', 'branches'];
+const FILE_SETS = [
+  'index.route.js',
+  'config',
+  'server/auth',
+  'server/helpers',
+  'server/post',
+  'server/tag',
+  'server/user',
+];
 
 class App extends Component {
   constructor(props) {
@@ -51,8 +59,6 @@ class App extends Component {
         if (saveTrigger) {
           SaveDataToLocalStorage({ value: res.total.statements.pct });
         }
-        // localStorage.clear();
-        // SaveDataToLocalStorage({ value: res.total.statements.pct });
         this.setState({ data: res });
       }).catch(error => console.error(error));
     }).catch(error => console.error(error));
@@ -64,55 +70,32 @@ class App extends Component {
       window.location.reload();
     }, 3600000);
     return (
-      <Grid fluid className="App">
-        <Row>
-          <Col className="howWide" sm={12}>
-            <header className="App-header">
-              <h1 className="App-title">Code Coverage Dashboard</h1>
-            </header>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12}>
-            <LineChart data={this.state.data} />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12}>
-            <h2>Totals</h2>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={3}>
-            <DonutChart selectName="statements" data={this.state.data} />
-          </Col>
-          <Col sm={3}>
-            <DonutChart selectName="lines" data={this.state.data} />
-          </Col>
-          <Col sm={3}>
-            <DonutChart selectName="functions" data={this.state.data} />
-          </Col>
-          <Col sm={3}>
-            <DonutChart selectName="branches" data={this.state.data} />
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12}>
-            <h2>SECTIONS</h2>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12}>
-            <StackChart fileSet="index.route.js" data={this.state.data} />
-            <StackChart fileSet="config" data={this.state.data} />
-            <StackChart fileSet="server/auth" data={this.state.data} />
-            <StackChart fileSet="server/helpers" data={this.state.data} />
-            <StackChart fileSet="server/post" data={this.state.data} />
-            <StackChart fileSet="server/tag" data={this.state.data} />
-            <StackChart fileSet="server/user" data={this.state.data} />
-          </Col>
-        </Row>
-      </Grid>
+      <div className="App">
+        <header className="App-header">
+          <h1 className="App-title">Code Coverage Dashboard</h1>
+        </header>
+        <section className="App-row">
+          <LineChart data={this.state.data} />
+        </section>
+        <section className="App-row">
+          <h2>Totals</h2>
+        </section>
+        <section className="App-row App-row--totals">
+          {TOTALS.map(name => (
+            <div className="App-total" key={name}>
+              <DonutChart selectName={name} data={this.state.data} />
+            </div>
+          ))}
+        </section>
+        <section className="App-row">
+          <h2>Sections</h2>
+        </section>
+        <section className="App-row App-row--sections">
+          {FILE_SETS.map(fileSet => (
+            <StackChart key={fileSet} fileSet={fileSet} data={this.state.data} />
+          ))}
+        </section>
+      </div>
     );
   }
 }

@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { BarStackHorizontal } from '@vx/shape';
-import { Group } from '@vx/group';
-import { scaleBand, scaleLinear, scaleOrdinal } from '@vx/scale';
+import { Component } from 'react';
+import { BarStackHorizontal } from '@visx/shape';
+import { Group } from '@visx/group';
+import { scaleBand, scaleLinear, scaleOrdinal } from '@visx/scale';
 
 class StackChart extends Component {
   render() {
     const { fileSet } = this.props;
     // If props exist for data reurn them, otherwise return defaults
     const totalData = () => {
-      if (this.props.data) { // eslint-disable-line react/destructuring-assignment
-        return this.props.data; // eslint-disable-line react/destructuring-assignment
+      if (this.props.data) {
+        return this.props.data;
       }
       const dataObj = {};
       dataObj[fileSet] = {
@@ -31,16 +31,19 @@ class StackChart extends Component {
       }
       return typeof a === 'object' ? a[key] + b[key] : a + b[key];
     });
-    const sTotal = dataSet.length >= 2 ? sumValues(dataSet, 'total') : dataSet[0].total;
-    const sCovered = dataSet.length >= 2 ? sumValues(dataSet, 'covered') : dataSet[0].covered;
+    // Sections missing from the report fall back to zero coverage
+    const buckets = dataSet.length ? dataSet : [{ total: 0, covered: 0 }];
+    const sTotal = buckets.length >= 2 ? sumValues(buckets, 'total') : buckets[0].total;
+    const sCovered = buckets.length >= 2 ? sumValues(buckets, 'covered') : buckets[0].covered;
     // Work out precentage from totaled values
-    const sPct = sCovered / sTotal * 100;
+    const sPct = sTotal ? sCovered / sTotal * 100 : 0;
     // Set the data
     const data = [{
+      fileSet,
       pct: sPct,
       diff: 100 - sPct,
     }];
-    const keys = Object.keys(data[0]).map(d => d);
+    const keys = ['pct', 'diff'];
     const width = parseInt((document.documentElement.offsetWidth / 8 - 5).toFixed(0), 10);
     const height = 80;
     const margin = {
@@ -57,13 +60,13 @@ class StackChart extends Component {
 
     //  scales
     const xScale = scaleLinear({
-      rangeRound: [0, xMax],
+      range: [0, xMax],
       domain: [0, 100],
       nice: true,
     });
     const yScale = scaleBand({
-      rangeRound: [40, 0],
-      domain: 1,
+      range: [0, yMax],
+      domain: [fileSet],
       padding: 0.4,
     });
     const zScale = scaleOrdinal({
@@ -72,18 +75,17 @@ class StackChart extends Component {
     });
 
     return (
-      <div style={{ display: 'inline-block' }}>
-        <svg width={width} height={height}>
+      <div style={{ display: 'inline-block' }} className="StackChart">
+        <svg width={width} height={height} role="img" aria-label={`${fileSet} coverage`}>
           <rect x={0} y={0} width={width} height={height} fill="#001E40" />
           <Group top={margin.top} left={margin.left}>
             <BarStackHorizontal
               data={data}
               keys={keys}
-              height={yMax}
-              y={d => d}
+              y={d => d.fileSet}
               xScale={xScale}
               yScale={yScale}
-              zScale={zScale}
+              color={zScale}
             />
             <text
               dy="-.7em"

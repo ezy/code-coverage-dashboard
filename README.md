@@ -1,6 +1,6 @@
 # 🚦 Code Coverage Dashboard
 
-A simple dashboard for [Istanbul](https://github.com/gotwarlost/istanbul) code coverage reports designed to be deployed to Heroku. The app takes any `coverage-summary.json` input file hosted within a folder on github and displays the data in a set of easily configurable chart components. Works great for a dev team to see their code coverage improving over time.
+A standalone dashboard for [Istanbul](https://github.com/gotwarlost/istanbul) code coverage reports. The app takes any `coverage-summary.json` input file hosted within a folder on github and displays the data in a set of easily configurable chart components. Works great for a dev team to see their code coverage improving over time.
 
 ![Code cov dash](https://raw.githubusercontent.com/ezy/code-coverage-dashboard/master/public/code-cov-dash.png)
 
@@ -13,11 +13,14 @@ A simple dashboard for [Istanbul](https://github.com/gotwarlost/istanbul) code c
 
 ## Quick start
 
+Requires Node.js 22 or newer (see `.nvmrc`).
+
 - Setup [Istanbul](https://github.com/gotwarlost/istanbul) to export a `json-summary` report with datestamp.
 - Upload `coverage-summary-1534886771995.json` to a folder in the github repo you want to display.
-- Add the folder location of your `json-summary` report in .env `REACT_APP_DATA_DIR_URL`.
-- Build to Heroku.
-- The app will check hourly for a new file in `REACT_APP_DATA_DIR_URL`.
+- Copy `.env.example` to `.env` and add the folder location of your `json-summary` report to `VITE_DATA_DIR_URL`.
+- Run `npm install`, then `npm run dev` and open [http://localhost:3000](http://localhost:3000).
+- Run `npm run build` for a static production bundle in `dist/`.
+- The app will check hourly for a new file in `VITE_DATA_DIR_URL`.
 - If the filename is different (eg. `coverage-summary-1534886791867.json`) the line chart will update.
 
 ## Istanbul setup
@@ -38,44 +41,41 @@ There are three different report charts that are displayed: A dateTime based **l
 
 ### Line chart
 
-The line chart component is located at `src/components/LineChart.js`. It takes an array of values from `localStorage` and displays them as date (X axis) and value (Y axis) from the object input: `{value: 96.75, date: "2018-08-21T04:13:07.414Z"}`. All localStorage values are loaded in the `src/templates/App.js` file.
+The line chart component is located at `src/components/LineChart.jsx`. It takes an array of values from `localStorage` and displays them as date (X axis) and value (Y axis) from the object input: `{value: 96.75, date: "2018-08-21T04:13:07.414Z"}`. All localStorage values are loaded in the `src/templates/App.jsx` file.
 
 ### Donut chart
 
 The donut chart is fixed and takes the JSON fetched from `coverage-summary.json` as `data` props. It's currently hard-coded to display the percentage of the report totals with the `selectName` property for the corresponding nested key in the `total` object.
-
 eg. `<DonutChart selectName="statements" data={this.state.data} />`
 
 ### Stack chart
 
 The stack charts take the JSON fetched from `coverage-summary.json` as `data` props. They take a second property `fileSet` that can be specified as all or part of the object key strings in `coverage-summary.json`. The stack chart will display the average coverage for an keys that match the `fileSet` property.
-
 eg. `<StackChart fileSet="server/user" data={this.state.data} />`
 
 ## Available scripts
 
 In the project directory, you can run:
 
-### `yarn start`
+### `npm run dev`
 
-Runs the app in the development mode.<br>
+Runs the app in development mode with Vite and React Fast Refresh.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+The page will reload if you make edits.
 
-### `yarn test`
+### `npm test`
 
-Launches the test runner in the interactive watch mode.
+Runs the [Vitest](https://vitest.dev) suite once. `npm run test:watch` re-runs on change.
 
-### `yarn build`
+### `npm run build`
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the app for production to the `dist` folder, minified and hashed. It can be served by any static host.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+### `npm run preview`
 
-### `yarn lint`
+Serves the production build from `dist` locally.
 
-Runs linting for the project and checks against rules in `.eslintrc.json`.
+### `npm run lint`
+
+Runs ESLint (flat config in `eslint.config.js`).
